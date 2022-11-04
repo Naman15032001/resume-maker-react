@@ -43,13 +43,14 @@ export const register = (userData) => {
         const firestore = getFirestore();
 
         firebase.auth().createUserWithEmailAndPassword(userData.email, userData.password).then(async (data) => {
-            const res = await firestore.collections('users').doc(data.user.uid).set({
+            const res = await firestore.collection('users').doc(data.user.uid).set({
                 email: userData.email,
                 resumeIds: []
             })
             //suc 
             dispatch(registerSuc())
         }).catch((err) => {
+            console.log("nam",err);
             dispatch(registerFail(err))
             setTimeout(() => {
                 dispatch(removeError())
@@ -67,7 +68,7 @@ const signinReq = () => {
 }
 
 const signinFail = (err) => {
-
+    console.log("why",err);
     return {
         type: authActions.SIGN_IN_FAILED,
         payload: err.message
@@ -96,7 +97,9 @@ export const signin = (userData) => {
         try {
             const res = await firebase.auth().signInWithEmailAndPassword(userData.email, userData.password);
             dispatch(signinSuc());
+            console.log("here1");
         } catch (err) {
+            console.log("here2",err.message);
             dispatch(signinFail(err))
             setTimeout(() => {
                 dispatch(removeError())
@@ -115,7 +118,7 @@ export const signout = () => {
 
         const firebase = getFirebase();
 
-        firebase.auth.signOut().then(() => {
+        firebase.auth().signOut().then(() => {
             dispatch({ type: authActions.SIGN_OUT_SUCCESS })
         }).catch((err) => {
             dispatch({ type: authActions.SIGN_OUT_FAILED, payload: err })

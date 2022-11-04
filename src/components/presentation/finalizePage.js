@@ -3,14 +3,42 @@ import ResumePreview from './resumePreview'
 import jsPDF from "jspdf";
 import html2canvas from 'html2canvas';
 import { connect } from "react-redux";
+import { useFirestore } from 'react-redux-firebase';
 
 function Finalize(props) {
   let educationSection = props.educationSection
   let contactSection = props.contactSection
   let documentd = props.document
+  let firestore = useFirestore();
 
   const saveToDatabase = async () => {
+    let user = await firestore.collection('users').doc(props.auth.uid).get();
+    user = user.data();
 
+    let obj
+    if (user.resumeIds != undefined) {
+      obj = {
+        ...user.resumeIds,
+        [documentd.id]: {
+          educationSection: educationSection,
+          contactSection: contactSection,
+          document: documentd
+        }
+      }
+    } else {
+      obj = {
+        [documentd.id]: {
+          educationSection: educationSection,
+          contactSection: contactSection,
+          document: documentd
+        }
+      }
+    }
+    await firestore.collection('users').doc(props.auth.uid).update({
+      resumeIds: obj
+    })
+
+    console.log("upddddd");
   }
   const downloadResume = () => {
 
@@ -63,7 +91,8 @@ const mapStateToProps = (state) => {
   return {
     document: state.document,
     contactSection: state.contact,
-    educationSection: state.education
+    educationSection: state.education,
+    auth: state.firebase.auth
   }
 }
 
