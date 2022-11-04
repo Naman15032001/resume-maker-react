@@ -1,13 +1,13 @@
-import * as contactActions from "../actions/actions";
+import * as educationActions from "../actions/actions";
 import initialState from './initialState.json'
 
-const contactReducer = (state = initialState.contact, action) => {
+const educationReducer = (state = initialState.education, action) => {
     switch (action.type) {
-        case contactActions.SET_CONTACT:
+        case educationActions.SET_EDUCATION:
             return {
                 ...action.payload
             }
-        case contactActions.UPDATE_CONTACT:
+        case educationActions.UPDATE_EDUCATION:
             return {
                 ...action.payload
             }
@@ -16,4 +16,4 @@ const contactReducer = (state = initialState.contact, action) => {
 
 }
 
-export default contactReducer
+export default educationReducer
