@@ -4,5 +4,9 @@
         "skincd": ""
     },
     "contact": null,
-    "education": null
+    "education": null,
+    "auth": {
+        "error": "",
+        "loading": false
+    }
 }
